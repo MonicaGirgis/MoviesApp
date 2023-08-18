@@ -10,6 +10,7 @@ import UIKit
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     var window: UIWindow?
+    var openedURL: URL?
     
     
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
@@ -53,8 +54,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
     }
     
-    func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
-        if let url = URLContexts.first?.url {
+    func scene(_ scene: UIScene, continue userActivity: NSUserActivity) {
+        if let url = userActivity.webpageURL, openedURL != url  {
+            openedURL = url
             print("url:", url)
             if url.scheme == "MyApp" {
                 if url.host == "details_screen" {
@@ -62,7 +64,24 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                         if let dynamicLinkURL = DynamicLinkGenerator.generateDynamicLink(movieId: movieId) {
                             UIApplication.shared.open(dynamicLinkURL, options: [:], completionHandler: nil)
                             navigateToMovieDetails(movieId: Int(movieId) ?? 0)
-                            
+
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
+        if let url = URLContexts.first?.url, openedURL != url {
+            openedURL = url
+            print("url:", url)
+            if url.scheme == "MyApp" {
+                if url.host == "details_screen" {
+                    if let movieId = url.pathComponents.last {
+                        if let dynamicLinkURL = DynamicLinkGenerator.generateDynamicLink(movieId: movieId) {
+                            UIApplication.shared.open(dynamicLinkURL, options: [:], completionHandler: nil)
+                            navigateToMovieDetails(movieId: Int(movieId) ?? 0)
                         }
                     }
                 }
@@ -70,14 +89,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         }
     }
     
-    
     func navigateToMovieDetails(movieId: Int) {
         if let vc = UIApplication.getTopViewController(), let navigatedVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: String(describing: MovieDetailsVC.self)) as? MovieDetailsVC {
             navigatedVC.viewModel = MovieDetailsViewModel(id: movieId)
             vc.navigationController?.pushViewController(navigatedVC, animated: true)
         }
     }
-    
-    
 }
 

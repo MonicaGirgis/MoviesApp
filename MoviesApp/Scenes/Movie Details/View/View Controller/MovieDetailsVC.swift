@@ -33,16 +33,15 @@ class MovieDetailsVC: UIViewController {
     
 
     private func setData() {
-        
-        titleLabel.text = viewModel.details?.title
+        title = viewModel.details?.title ?? "Movie details"
+        titleLabel.text = "\(viewModel.details?.runtime ?? 0) " + "min"
         contentLabel.text = viewModel.details?.overview
-        authorLabel.text = "\(viewModel.details?.runtime ?? 0) " + "min"
+        authorLabel.text = viewModel.details?.title
         sourceLabel.text = "\(viewModel.details?.voteAverage ?? 0)"
         dateLabel.text = viewModel.details?.releaseDate
         contentImageView.getAsync(viewModel.details?.posterPath ?? "")
         sourceImageView.getAsync(viewModel.details?.backdropPath ?? "")
     }
-
 }
 
 extension MovieDetailsVC: ViewModelDelegates {
