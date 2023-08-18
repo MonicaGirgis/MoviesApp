@@ -7,12 +7,12 @@
 
 import Foundation
 
-enum SimpleNews{
+enum Movies{
     case GetData(country: String, category: String, page: Int, pageSize: Int)
     case Search(searchText: String, category: String, page: Int, pageSize: Int)
 }
 
-extension SimpleNews: Endpoint{
+extension Movies: Endpoint{
     var base: String {
         return Bundle.main.baseURL
     }

@@ -12,7 +12,7 @@ class APIRoute{
     static let shared:APIRoute = APIRoute()
     private init(){}
     
-    private func initRequest(_ clientRequest:SimpleNews)->URLRequest? {
+    private func initRequest(_ clientRequest:Movies)->URLRequest? {
         var request:URLRequest = clientRequest.request
         
         request.httpMethod = clientRequest.method.rawValue
@@ -78,7 +78,7 @@ class APIRoute{
         return task
     }
     
-    func fetchRequest<T: Codable>(clientRequest: SimpleNews, decodingModel: T.Type, completion: @escaping (Result<T, APIError>) -> ()){
+    func fetchRequest<T: Codable>(clientRequest: Movies, decodingModel: T.Type, completion: @escaping (Result<T, APIError>) -> ()){
         
         guard let urlRequest:URLRequest = self.initRequest(clientRequest) else {return}
         
