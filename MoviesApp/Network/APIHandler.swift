@@ -34,7 +34,6 @@ extension Endpoint {
     var request: URLRequest {
         let url = urlComponents.url!
         var request =  URLRequest(url: url)
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
         return request
     }

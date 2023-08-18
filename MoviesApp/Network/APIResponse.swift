@@ -7,15 +7,12 @@
 
 import Foundation
 
-//struct APIResponse<R: Codable>: Equatable, Codable {
-//    static func == (lhs: APIResponse<R>, rhs: APIResponse<R>) -> Bool {
-//        return (lhs.articles as? [Article])?.count == (rhs.articles as? [Article])?.count
-//    }
-//    
-//    var totalResults: Int?
-//    var articles: R
-//    var status: String?
-//}
+struct APIResponse<R: Codable>: Codable {
+    var page: Int?
+    var results: R
+    var total_pages: Int?
+    var total_results: Int?
+}
 
 struct httpHeader:Decodable {
     var key:String

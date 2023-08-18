@@ -8,8 +8,8 @@
 import Foundation
 
 enum Movies{
-    case GetData(country: String, category: String, page: Int, pageSize: Int)
-    case Search(searchText: String, category: String, page: Int, pageSize: Int)
+    case getData(page: Int)
+    case getDetails(id: Int)
 }
 
 extension Movies: Endpoint{
@@ -22,28 +22,34 @@ extension Movies: Endpoint{
     }
     
     var path: String {
-        return ""
+        switch self {
+        case .getData:
+            return "popular"
+            
+        case .getDetails(let id):
+            return "\(id)"
+        }
     }
     
     var queryItems: [URLQueryItem] {
+        var queryItems: [URLQueryItem] = []
+        queryItems.append(URLQueryItem(name: "language", value: "en-US"))
+        
         switch self{
-        case .GetData(let country, let category, let page, let pageSize):
-            return [URLQueryItem(name: "country", value: country),
-                    URLQueryItem(name: "category", value: category),
-                    URLQueryItem(name: "page", value: "\(page)"),
-                    URLQueryItem(name: "pageSize", value: "\(pageSize)")]
+        case .getData(let page):
+            queryItems.append(URLQueryItem(name: "page", value: "\(page)"))
             
-        case .Search(let searchText, let category, let page, let pageSize):
-            return [URLQueryItem(name: "q", value: searchText),
-                    URLQueryItem(name: "category", value: category),
-                    URLQueryItem(name: "page", value: "\(page)"),
-                    URLQueryItem(name: "pageSize", value: "\(pageSize)")]
+        default:
+           break
         }
+        
+        return queryItems
     }
     
     var headers : [httpHeader] {
         let httpHeaders = [
-            httpHeader(key: "X-Api-Key", value: "291fe5f954674cf9bd005c09f389ce70")
+            httpHeader(key: "Authorization", value: "Bearer " +  "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI2ZTA4OGEzZDdjNDdhYWQwN2NiMTgxYTUyZGI0MTMyNiIsInN1YiI6IjY0ZGYzMzEzNWFiODFhMDBhZDIwOGJlMCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.SpZaoS7AGKNyOsxgjs1uZA_kDp4IERNaHOuetxfYgG0"),
+            httpHeader(key: "Accept", value: "application/json")
         ]
         
         return httpHeaders
